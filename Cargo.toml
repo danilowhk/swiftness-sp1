@@ -1,0 +1,7 @@
+[workspace]
+members = ["lib", "program", "script"]
+resolver = "2"
+
+[workspace.dependencies]
+alloy-sol-types = "0.7.7"
+swiftness = { git = "https://github.com/danilowhk/swiftness" }
