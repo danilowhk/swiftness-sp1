@@ -16,6 +16,7 @@ clap = { version = "4.5.19", features = ["derive", "env"] }
 tracing = "0.1.40"
 hex = "0.4.3"
 alloy-sol-types = { workspace = true }
+bincode = { workspace = true }
 
 swiftness = { workspace = true }
 swiftness_air = { workspace = true }

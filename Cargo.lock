@@ -5563,6 +5563,7 @@ name = "swiftness-script"
 version = "0.1.0"
 dependencies = [
  "alloy-sol-types 0.8.6",
+ "bincode",
  "clap",
  "hex",
  "serde",
