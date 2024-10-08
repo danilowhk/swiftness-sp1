@@ -12,20 +12,20 @@
 
 use clap::{Parser, ValueEnum};
 use serde::{Deserialize, Serialize};
-use sp1_sdk::{HashableKey, ProverClient, SP1ProofWithPublicValues, SP1Stdin, SP1VerifyingKey};
+use sp1_sdk::{HashableKey, ProverClient, SP1ProofWithPublicValues};
 use std::{fs, path::PathBuf};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const FIBONACCI_ELF: &[u8] = include_bytes!("../../../elf/riscv32im-succinct-zkvm-elf");
+pub const SWIFTNESS_ELF: &[u8] = include_bytes!("../../../elf/riscv32im-succinct-zkvm-elf");
 
 /// The arguments for the EVM command.
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct EVMArgs {
-    #[clap(long)]
-    proof: String,
     #[clap(long, value_enum, default_value = "groth16")]
     system: ProofSystem,
+    #[clap(long)]
+    proof: String,
 }
 
 /// Enum representing the available proof systems
@@ -55,34 +55,11 @@ fn main() {
     let client = ProverClient::new();
 
     // Setup the program.
-    let (pk, vk) = client.setup(FIBONACCI_ELF);
+    let (_pk, vk) = client.setup(SWIFTNESS_ELF);
 
-    // Setup the inputs.
-    let mut stdin = SP1Stdin::new();
+    let proof: SP1ProofWithPublicValues =
+        bincode::deserialize(&fs::read(args.proof).unwrap()).expect("Deserialization failed");
 
-    let input = fs::read_to_string(args.proof).unwrap();
-    let proof_json = swiftness::parse(input.to_string()).unwrap();
-
-    stdin.write(&proof_json);
-
-    println!("Proof System: {:?}", args.system);
-
-    // Generate the proof based on the selected proof system.
-    let proof = match args.system {
-        ProofSystem::Plonk => client.prove(&pk, stdin).plonk().run(),
-        ProofSystem::Groth16 => client.prove(&pk, stdin).groth16().run(),
-    }
-    .expect("failed to generate proof");
-
-    create_proof_fixture(&proof, &vk, args.system);
-}
-
-/// Create a fixture for the given proof.
-fn create_proof_fixture(
-    proof: &SP1ProofWithPublicValues,
-    vk: &SP1VerifyingKey,
-    system: ProofSystem,
-) {
     // Deserialize the public values.
     let bytes = proof.public_values.as_slice();
 
@@ -113,7 +90,7 @@ fn create_proof_fixture(
     let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../contracts/src/fixtures");
     std::fs::create_dir_all(&fixture_path).expect("failed to create fixture path");
     std::fs::write(
-        fixture_path.join(format!("{:?}-fixture.json", system).to_lowercase()),
+        fixture_path.join(format!("{:?}-fixture.json", args.system).to_lowercase()),
         serde_json::to_string_pretty(&fixture).unwrap(),
     )
     .expect("failed to write fixture");
