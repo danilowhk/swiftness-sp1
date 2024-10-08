@@ -1,11 +1,11 @@
 [package]
 version = "0.1.0"
-name = "fibonacci-script"
+name = "swiftness-script"
 edition = "2021"
-default-run = "fibonacci"
+default-run = "swiftness"
 
 [[bin]]
-name = "fibonacci"
+name = "swiftness"
 path = "src/bin/main.rs"
 
 [[bin]]
@@ -20,7 +20,7 @@ clap = { version = "4.0", features = ["derive", "env"] }
 tracing = "0.1.40"
 hex = "0.4.3"
 alloy-sol-types = { workspace = true }
-fibonacci-lib = { path = "../lib" }
+swiftness-lib = { path = "../lib" }
 
 [build-dependencies]
 sp1-helper = "2.0.0"
