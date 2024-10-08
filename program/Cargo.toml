@@ -1,12 +1,11 @@
 [package]
 version = "0.1.0"
-name = "fibonacci-program"
+name = "swiftness-program"
 edition = "2021"
 
 [dependencies]
-alloy-sol-types = { workspace = true }
 sp1-zkvm = "2.0.0"
-fibonacci-lib = { path = "../lib" }
-swiftness = { git = "https://github.com/danilowhk/swiftness" }
-swiftness_air = { git = "https://github.com/danilowhk/swiftness" }
 serde_json = { version = "1.0.114", default-features = false }
+
+swiftness = { workspace = true }
+swiftness_air = { workspace = true }

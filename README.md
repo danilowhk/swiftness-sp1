@@ -28,7 +28,7 @@ To run the program without generating a proof:
 
 ```sh
 cd script
-cargo run --release -- --execute
+cargo run --release -- --execute --proof ../examples/proofs/recursive/bitcoin_bootloader_proof.json
 ```
 
 This will execute the program and display the output.
@@ -39,7 +39,7 @@ To generate a core proof for your program:
 
 ```sh
 cd script
-cargo run --release -- --prove
+cargo run --release -- --prove --proof ../examples/proofs/recursive/bitcoin_bootloader_proof.json
 ```
 
 ### Generate an EVM-Compatible Proof

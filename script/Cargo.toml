@@ -8,19 +8,17 @@ default-run = "swiftness"
 name = "swiftness"
 path = "src/bin/main.rs"
 
-[[bin]]
-name = "evm"
-path = "src/bin/evm.rs"
-
 [dependencies]
 sp1-sdk = "2.0.0"
-serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
-serde = { version = "1.0", default-features = false, features = ["derive"] }
-clap = { version = "4.0", features = ["derive", "env"] }
+serde_json = { version = "1.0.128", default-features = false, features = ["alloc"] }
+serde = { version = "1.0.210", default-features = false, features = ["derive"] }
+clap = { version = "4.5.19", features = ["derive", "env"] }
 tracing = "0.1.40"
 hex = "0.4.3"
 alloy-sol-types = { workspace = true }
-swiftness-lib = { path = "../lib" }
+
+swiftness = { workspace = true }
+swiftness_air = { workspace = true }
 
 [build-dependencies]
 sp1-helper = "2.0.0"

@@ -1,7 +1,13 @@
 [workspace]
-members = ["lib", "program", "script"]
+members = ["program", "script"]
 resolver = "2"
 
 [workspace.dependencies]
-alloy-sol-types = "0.7.7"
-swiftness = { git = "https://github.com/danilowhk/swiftness" }
+alloy-sol-types = "0.8.6"
+
+swiftness = { git = "https://github.com/iosis-tech/swiftness.git", default-features = false, features = [
+    "recursive", "keccak_160_lsb", "stone5"
+], branch = "sp1_patch"}
+swiftness_air = { git = "https://github.com/iosis-tech/swiftness.git", default-features = false, features = [
+    "recursive", "stone5"
+], branch = "sp1_patch"}

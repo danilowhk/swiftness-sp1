@@ -10,9 +10,9 @@
 //! RUST_LOG=info cargo run --release -- --prove
 //! ```
 
-use alloy_sol_types::SolType;
+use std::fs;
+
 use clap::Parser;
-use swiftness_lib::PublicValuesStruct;
 use sp1_sdk::{ProverClient, SP1Stdin};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
@@ -26,10 +26,10 @@ struct Args {
     execute: bool,
 
     #[clap(long)]
-    prove: bool,
+    proof: String,
 
-    #[clap(long, default_value = "20")]
-    n: u32,
+    #[clap(long)]
+    prove: bool,
 }
 
 fn main() {
@@ -49,16 +49,17 @@ fn main() {
 
     // Setup the inputs.
     let mut stdin = SP1Stdin::new();
-    stdin.write(&args.n);
+
+    let input = fs::read_to_string(args.proof).unwrap();
+    let proof_json = swiftness::parse(input.to_string()).unwrap();
+
+    stdin.write(&proof_json);
 
     if args.execute {
         // Execute the program
         println!("Verifying Cairo Program:");
-        let (output, report) = client.execute(SWIFTNESS_ELF, stdin).run().unwrap();
-        println!("Verification executed successfully.");
-
-        // Read the output.
-        let decoded = PublicValuesStruct::abi_decode(output.as_slice(), true).unwrap();
+        let (_output, report) = client.execute(SWIFTNESS_ELF, stdin).run().unwrap();
+        // println!("Verification executed successfully output: {:?}", output);
 
         // Record the number of cycles executed.
         println!("Number of cycles: {}", report.total_instruction_count());
