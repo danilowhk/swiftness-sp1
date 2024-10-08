@@ -10,7 +10,8 @@ sp1_zkvm::entrypoint!(main);
 
 use alloy_sol_types::SolType;
 use fibonacci_lib::{fibonacci, PublicValuesStruct};
-use swiftness::{json_parser, stark_proof};
+use swiftness::{parse, TransformTo};
+use swiftness_air::layout::recursive::Layout;
 
 pub fn main() {
     // Read an input to the program.
@@ -18,12 +19,12 @@ pub fn main() {
     // Behind the scenes, this compiles down to a custom system call which handles reading inputs
     // from the prover.
 
-    let input = include_str!("../../examples/proofs/dex/cairo0_stone5_example_proof.json");
-    let proof_json = serde_json::from_str::<json_parser::StarkProof>(input).unwrap();
-    let stark_proof: swiftness::types::StarkProof = swiftness::types::StarkProof::try_from(proof_json).unwrap();
+    let input = include_str!("../../examples/proofs/recursive/cairo0_stone5_example_proof.json");
+    let proof_json = parse(input.to_string()).unwrap();
+    let stark_proof = proof_json.transform_to();
     let security_bits = stark_proof.config.security_bits();
-    // let result = stark_proof.verify::<Layout>(security_bits)?;
-    // println!("{:?}", result);
+    let result = stark_proof.verify::<Layout>(security_bits).unwrap();
+    println!("{:?}", result);
 
     let n = sp1_zkvm::io::read::<u32>();
 

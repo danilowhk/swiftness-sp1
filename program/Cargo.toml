@@ -8,4 +8,5 @@ alloy-sol-types = { workspace = true }
 sp1-zkvm = "2.0.0"
 fibonacci-lib = { path = "../lib" }
 swiftness = { git = "https://github.com/danilowhk/swiftness" }
+swiftness_air = { git = "https://github.com/danilowhk/swiftness" }
 serde_json = { version = "1.0.114", default-features = false }
