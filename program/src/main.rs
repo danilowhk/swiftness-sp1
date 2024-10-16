@@ -9,7 +9,7 @@
 sp1_zkvm::entrypoint!(main);
 
 use swiftness::TransformTo;
-use swiftness_air::layout::recursive::Layout;
+use swiftness_air::layout::starknet_with_keccak::Layout;
 
 pub fn main() {
     // Read an input to the program.
